@@ -48,8 +48,8 @@ namespace NetCoreIdentityApp.Web.Controllers
 
             if (identityResult.Succeeded)
             {
-                ViewBag.Message = "Üye başarılı bir şekilde kayıt edildi.";
-                return View();
+                TempData["SuccesMessage"] = "Üye başarılı bir şekilde kayıt edildi.";
+                return RedirectToAction(nameof(HomeController.SignUp));
             }
 
             foreach (IdentityError item in identityResult.Errors)
