@@ -48,7 +48,7 @@ namespace NetCoreIdentityApp.Web.Controllers
 
             if (identityResult.Succeeded)
             {
-                TempData["SuccesMessage"] = "Üye başarılı bir şekilde kayıt edildi.";
+                TempData["SuccesMessage"] = "Üye başarılı bir şekilde kayıt edildi....";
                 return RedirectToAction(nameof(HomeController.SignUp));
             }
 
