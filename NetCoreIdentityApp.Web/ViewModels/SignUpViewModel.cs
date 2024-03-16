@@ -17,23 +17,28 @@ namespace NetCoreIdentityApp.Web.ViewModels
             Password = password;
         }
 
-        [Display(Name ="Kullanıcı Adı: ")]
+        [Required(ErrorMessage = "Kullanıcı adı zorunludur.")]
+        [Display(Name = "Kullanıcı Adı")]
         public string UserName { get; set; }
 
-
-        [Display(Name = "Email: ")]
+        [Required(ErrorMessage = "Email zorunludur.")]
+        [EmailAddress(ErrorMessage = "Geçerli bir email adresi giriniz.")]
+        [Display(Name = "Email")]
         public string Email { get; set; }
 
 
-        [Display(Name ="Telefon: ")]
+        [Required(ErrorMessage = "Telefon numarası zorunludur.")]
+        [Phone(ErrorMessage = "Geçerli bir telefon numarası giriniz.")]
+        [Display(Name = "Telefon")]
         public string PhoneNumber { get; set; }
 
-
-        [Display(Name = "Şifre: ")]
+        [Required(ErrorMessage = "Şifre zorunludur.")]
+        [Display(Name = "Şifre")]
         public string Password { get; set; }
 
-
-        [Display(Name = "Şifre Tekrar: ")]
+        [Required(ErrorMessage = "Şifre tekrarı zorunludur.")]
+        [Compare("Password", ErrorMessage = "Şifreler eşleşmiyor.")]
+        [Display(Name = "Şifre Tekrar")]
         public string PasswordConfirm { get; set; }
     }
 }

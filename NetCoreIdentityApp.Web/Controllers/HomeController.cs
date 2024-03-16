@@ -38,8 +38,11 @@ namespace NetCoreIdentityApp.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> SignUp(SignUpViewModel request)
         {
-
-           var identityResult = await _userManager.CreateAsync(new()
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var identityResult = await _userManager.CreateAsync(new()// kendi içerisinde bulunan bi iş kuralı var ve username göre var yok kontrolu yapıyor
             {
                 UserName = request.UserName,
                 PhoneNumber = request.PhoneNumber,
@@ -52,7 +55,7 @@ namespace NetCoreIdentityApp.Web.Controllers
                 return RedirectToAction(nameof(HomeController.SignUp));
             }
 
-            foreach (IdentityError item in identityResult.Errors)
+            foreach (IdentityError item in identityResult.Errors) 
             {
                 ModelState.AddModelError(string.Empty, item.Description);
             }
