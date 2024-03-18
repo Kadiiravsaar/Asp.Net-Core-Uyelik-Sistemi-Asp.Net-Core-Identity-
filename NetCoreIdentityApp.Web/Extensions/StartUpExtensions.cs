@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using NetCoreIdentityApp.Web.CustomValidation;
+using NetCoreIdentityApp.Web.Localizations;
 using NetCoreIdentityApp.Web.Models;
 
 namespace NetCoreIdentityApp.Web.Extensions
@@ -21,7 +22,7 @@ namespace NetCoreIdentityApp.Web.Extensions
                 options.Password.RequireDigit = false;
 
 
-            }).AddPasswordValidator<PasswordValidator>().AddUserValidator<UserValidator>().AddEntityFrameworkStores<AppDbContext>();
+            }).AddPasswordValidator<PasswordValidator>().AddErrorDescriber<LocalizationIdentityErrorDescriber>().AddUserValidator<UserValidator>().AddEntityFrameworkStores<AppDbContext>();
 
         }
     }
