@@ -8,7 +8,8 @@ namespace NetCoreIdentityApp.Web.CustomValidation
         public Task<IdentityResult> ValidateAsync(UserManager<AppUser> manager, AppUser user)
         {
             var errors = new List<IdentityError>();
-            var isDigit = int.TryParse(user.UserName![0].ToString(), out _);
+            var isDigit = int.TryParse(user.UserName![0].ToString(), out _); // int.TryParse kullanıcı adında ilk karekter sayısal mı ona bakar, 2. overload'ında ise eğer varsa bunu bir değişkene atat
+                                                                             // fakat ben onu kullanmak istemiyorsam memory'de yer tutmasın istiyorusam _ kullanarak keserim
 
             if (isDigit)
             {
