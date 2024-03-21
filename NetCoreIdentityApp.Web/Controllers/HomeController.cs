@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NetCoreIdentityApp.Web.Extensions;
 using NetCoreIdentityApp.Web.Models;
 using NetCoreIdentityApp.Web.ViewModels;
 using System.Diagnostics;
@@ -10,11 +11,13 @@ namespace NetCoreIdentityApp.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public HomeController(ILogger<HomeController> logger, UserManager<AppUser> userManager = null)
+        public HomeController(ILogger<HomeController> logger, UserManager<AppUser> userManager = null, SignInManager<AppUser> signInManager = null)
         {
             _logger = logger;
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
 
@@ -34,6 +37,60 @@ namespace NetCoreIdentityApp.Web.Controllers
 
             return View();
         }
+
+        public IActionResult SignIn()
+        {
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SignIn(SignInViewModel request, string? returnUurl = null)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            returnUurl = returnUurl ?? Url.Action("Index", "Home");
+            var hasUser = await _userManager.FindByEmailAsync(request.Email);
+
+            if (hasUser == null)
+            {
+
+                ModelState.AddModelError(string.Empty, "E-posta ya da şifre hatalı.");
+                return View(request);
+            }
+
+            var signInResult = await _signInManager.PasswordSignInAsync(
+                hasUser, 
+                request.Password, 
+                isPersistent: request.RememberMe, 
+                lockoutOnFailure: false);
+
+
+            if (signInResult.Succeeded)
+            {
+                return Redirect(returnUurl);
+            }
+
+            ModelState.AddModelErrorList(new List<string>()
+            {
+                "E-posta ya da şifre hatalı."
+            });
+
+         
+
+            return View();
+
+        }
+
+
+
+
+
+    
+
 
         [HttpPost]
         public async Task<IActionResult> SignUp(SignUpViewModel request)
@@ -55,10 +112,8 @@ namespace NetCoreIdentityApp.Web.Controllers
                 return RedirectToAction(nameof(HomeController.SignUp));
             }
 
-            foreach (IdentityError item in identityResult.Errors) 
-            {
-                ModelState.AddModelError(string.Empty, item.Description);
-            }
+           
+            ModelState.AddModelErrorList(identityResult.Errors.Select(e=>e.Description).ToList());
 
             return View();
         }
