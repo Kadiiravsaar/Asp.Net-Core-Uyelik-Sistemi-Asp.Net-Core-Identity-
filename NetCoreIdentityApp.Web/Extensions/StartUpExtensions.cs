@@ -22,6 +22,10 @@ namespace NetCoreIdentityApp.Web.Extensions
                 options.Password.RequireDigit = false;
 
 
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1); // 1 dakika kilitlensin demek
+                options.Lockout.MaxFailedAccessAttempts = 3;                      // 3 kez yanlış girme hakkı var 
+
+
             }).AddPasswordValidator<PasswordValidator>().AddErrorDescriber<LocalizationIdentityErrorDescriber>().AddUserValidator<UserValidator>().AddEntityFrameworkStores<AppDbContext>();
 
         }

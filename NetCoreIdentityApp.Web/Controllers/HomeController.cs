@@ -66,8 +66,13 @@ namespace NetCoreIdentityApp.Web.Controllers
                 hasUser, 
                 request.Password, 
                 isPersistent: request.RememberMe, 
-                lockoutOnFailure: false);
+                lockoutOnFailure: true);
 
+            if (signInResult.IsLockedOut)
+            {
+                ModelState.AddModelError(string.Empty, "1 dakika boyunca giri yapamazsın");
+                return View();
+            }
 
             if (signInResult.Succeeded)
             {
@@ -78,8 +83,6 @@ namespace NetCoreIdentityApp.Web.Controllers
             {
                 "E-posta ya da şifre hatalı."
             });
-
-         
 
             return View();
 
