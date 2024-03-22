@@ -28,6 +28,9 @@ builder.Services.ConfigureApplicationCookie(opt =>
     opt.LoginPath = new PathString("/Home/SignIn");
     //Kullanýcýlar korunan bir kaynaða eriþmeye çalýþýrken ve kimlik doðrulamasý yapmamýþsa, oturum açmak için bu yola yönlendirilirler.
 
+    opt.LogoutPath = new PathString("/Member/Logout");
+
+
     opt.Cookie = cookieBuilder;
     opt.ExpireTimeSpan = TimeSpan.FromDays(30);
     //Bu satýr, kimlik doðrulama çerezinin son kullanma süresini ayarlar.
@@ -53,6 +56,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

@@ -45,28 +45,25 @@ namespace NetCoreIdentityApp.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SignIn(SignInViewModel request, string? returnUurl = null)
+        public async Task<IActionResult> SignIn(SignInViewModel request, string? returnUrl = null)
         {
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
-
-            returnUurl = returnUurl ?? Url.Action("Index", "Home");
+            
+            returnUrl = returnUrl ?? Url.Action("Index", "Home");
             var hasUser = await _userManager.FindByEmailAsync(request.Email);
 
             if (hasUser == null)
             {
 
                 ModelState.AddModelError(string.Empty, "E-posta ya da şifre hatalı.");
-                return View(request);
+                return View();
             }
 
-            var signInResult = await _signInManager.PasswordSignInAsync(
-                hasUser, 
-                request.Password, 
-                isPersistent: request.RememberMe, 
-                lockoutOnFailure: true);
+            var signInResult = await _signInManager.PasswordSignInAsync(hasUser, request.Password, isPersistent: request.RememberMe, lockoutOnFailure: true);
+
+            if (signInResult.Succeeded)
+            {
+                return RedirectToAction("Index","Member");
+            }
 
             if (signInResult.IsLockedOut)
             {
@@ -74,10 +71,6 @@ namespace NetCoreIdentityApp.Web.Controllers
                 return View();
             }
 
-            if (signInResult.Succeeded)
-            {
-                return Redirect(returnUurl);
-            }
 
             ModelState.AddModelErrorList(new List<string>()
             {
@@ -87,12 +80,6 @@ namespace NetCoreIdentityApp.Web.Controllers
             return View();
 
         }
-
-
-
-
-
-    
 
 
         [HttpPost]
