@@ -109,11 +109,45 @@ namespace NetCoreIdentityApp.Web.Controllers
         }
 
 
+        public IActionResult ForgotPassword()
+        {
+          
+            return View();
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+
+            if (user == null)
+            {
+                ModelState.AddModelError(String.Empty, "Bu E-Postaya Sahip kullanıcı bulunamadı");
+                return View();
+            }
+
+            var passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            // bir link üretmek lazım
+            var passwordResetLink = Url.Action("ResetPassword", "Home", new { userId = user.Id, token = passwordResetToken });
+            //  https://localhost:7006? userId =12345& token =a sdad123asd3
+
+            //Email Servis Lazım
+
+            TempData["SuccesMessage"] = "Şifre yenileme linki e-posta adresinize gönderildi";
+            return RedirectToAction(nameof(ForgotPassword));
+            // vmmk sjtq swlv kali
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+
+
     }
 }

@@ -10,7 +10,13 @@ namespace NetCoreIdentityApp.Web.Extensions
         // static anahtar kelimesi ise bu sınıfın nesne oluşturulmadan doğrudan kullanılabileceğini belirtir. Bu sınıfın tüm üyeleri de static olmalı
         public static void AddIdentityWithExt(this IServiceCollection services)
         {
-           services.AddIdentity<AppUser, AppRole>(options =>
+            services.Configure<DataProtectionTokenProviderOptions>(opt =>
+            {
+                opt.TokenLifespan = TimeSpan.FromSeconds(2); // oluşturacağım token'ın ömrünü yapılandırdırm
+            });
+
+
+            services.AddIdentity<AppUser, AppRole>(options =>
             {
                 options.User.RequireUniqueEmail = true;
                 options.User.AllowedUserNameCharacters = "abcdefghijklmnoprstuvwxyz1234567890_";
@@ -26,7 +32,11 @@ namespace NetCoreIdentityApp.Web.Extensions
                 options.Lockout.MaxFailedAccessAttempts = 3;                      // 3 kez yanlış girme hakkı var 
 
 
-            }).AddPasswordValidator<PasswordValidator>().AddErrorDescriber<LocalizationIdentityErrorDescriber>().AddUserValidator<UserValidator>().AddEntityFrameworkStores<AppDbContext>();
+            }).AddPasswordValidator<PasswordValidator>()
+            .AddUserValidator<UserValidator>()
+            .AddErrorDescriber<LocalizationIdentityErrorDescriber>()
+            .AddDefaultTokenProviders() // kendisi token oluşturacak ve şifre sıfırlama için yapıyorum
+            .AddEntityFrameworkStores<AppDbContext>();
 
         }
     }
