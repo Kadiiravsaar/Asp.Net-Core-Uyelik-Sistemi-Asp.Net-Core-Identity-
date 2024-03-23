@@ -19,7 +19,7 @@ namespace NetCoreIdentityApp.Web.Extensions
             services.AddIdentity<AppUser, AppRole>(options =>
             {
                 options.User.RequireUniqueEmail = true;
-                options.User.AllowedUserNameCharacters = "abcdefghijklmnoprstuvwxyz1234567890_";
+                //options.User.AllowedUserNameCharacters = "abcdefghijklmnoprstuvwxyz1234567890_";
 
                 options.Password.RequiredLength = 6;
                 options.Password.RequireNonAlphanumeric = false;
