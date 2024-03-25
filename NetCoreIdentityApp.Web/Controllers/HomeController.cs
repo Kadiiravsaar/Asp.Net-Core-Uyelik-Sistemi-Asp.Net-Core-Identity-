@@ -83,8 +83,8 @@ namespace NetCoreIdentityApp.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> SignIn(SignInViewModel request, string? returnUrl = null)
         {
+            returnUrl ??= Url.Action("Index", "Home");
 
-            returnUrl = returnUrl ?? Url.Action("Index", "Home");
             var hasUser = await _userManager.FindByEmailAsync(request.Email);
 
             if (hasUser == null)
@@ -98,7 +98,7 @@ namespace NetCoreIdentityApp.Web.Controllers
 
             if (signInResult.Succeeded)
             {
-                return RedirectToAction("Index", "Member");
+                return Redirect(returnUrl!);
             }
 
             if (signInResult.IsLockedOut)
