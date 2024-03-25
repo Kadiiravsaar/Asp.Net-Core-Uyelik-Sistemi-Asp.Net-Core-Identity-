@@ -12,7 +12,7 @@ namespace NetCoreIdentityApp.Web.Extensions
         {
             services.Configure<DataProtectionTokenProviderOptions>(opt =>
             {
-                opt.TokenLifespan = TimeSpan.FromSeconds(2); // oluşturacağım token'ın ömrünü yapılandırdırm
+                opt.TokenLifespan = TimeSpan.FromMinutes(2); // oluşturacağım token'ın ömrünü yapılandırdırm
             });
 
 
