@@ -108,7 +108,7 @@ namespace NetCoreIdentityApp.Web.Controllers
 
             if (signInResult.IsLockedOut)
             {
-                ModelState.AddModelError(string.Empty, "1 dakika boyunca giri yapamazsın");
+                ModelState.AddModelError(string.Empty, "1 dakika boyunca giriş yapamazsın");
                 return View();
             }
 
@@ -123,7 +123,7 @@ namespace NetCoreIdentityApp.Web.Controllers
         }
 
 
-        public IActionResult ForgotPassword()
+        public IActionResult ForgotPassword() // Şifremi unuttum
         {
 
             return View();
@@ -131,7 +131,7 @@ namespace NetCoreIdentityApp.Web.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel request)
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel request) // Şifremi unuttum
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
 
@@ -163,7 +163,7 @@ namespace NetCoreIdentityApp.Web.Controllers
             TempData["token"] = token;
             return View();
 
-        }
+        } // maile gelen linke tıklanınca
 
         [HttpPost]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel request)
