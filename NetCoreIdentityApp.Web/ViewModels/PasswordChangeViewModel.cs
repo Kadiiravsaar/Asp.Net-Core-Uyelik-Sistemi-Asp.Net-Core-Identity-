@@ -6,7 +6,7 @@ namespace NetCoreIdentityApp.Web.ViewModels
     {
         [DataType(DataType.Password)]
         [Required(ErrorMessage = "Şifre alanı boş bırakılamaz.")]
-        [Display(Name = "Yeni şifre :")]
+        [Display(Name = "Mevcut şifre :")]
         [MinLength(6, ErrorMessage = "Şifreniz en az 6 karakter olabilir")]
         public string PasswordOld { get; set; } = null!;
 
