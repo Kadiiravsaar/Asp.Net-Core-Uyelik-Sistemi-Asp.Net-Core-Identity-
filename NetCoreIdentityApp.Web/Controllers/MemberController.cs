@@ -31,7 +31,8 @@ namespace NetCoreIdentityApp.Web.Controllers
             {
                 Email = currentUser!.Email,
                 UserName = currentUser!.UserName,
-                PhoneNumber = currentUser!.PhoneNumber
+                PhoneNumber = currentUser!.PhoneNumber,
+                Picture = currentUser!.Picture
             };
             return View(userViewModel);
         }
