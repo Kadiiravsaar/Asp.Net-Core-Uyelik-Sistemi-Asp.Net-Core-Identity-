@@ -8,6 +8,6 @@ namespace NetCoreIdentityApp.Web.Areas.Admin.Models
 
         [Required(ErrorMessage = "Role isim alanı boş bırakılamaz.")]
         [Display(Name = "Role ismi :")]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
     }
 }
