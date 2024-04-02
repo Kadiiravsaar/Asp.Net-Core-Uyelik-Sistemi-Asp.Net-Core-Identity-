@@ -3,6 +3,14 @@
 @{
     ViewData["Title"] = "Index";
 }
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+
+
 <a class="btn btn-primary" asp-area="admin" asp-controller="Roles" asp-action="RoleCreate">Rol Ekle</a>
 
 <div class="row">
@@ -35,7 +43,7 @@
                         <td>@item.Name</td>
                         <td>
                             <a class="btn btn-dark btn-sm" asp-area="admin" asp-controller="roles" asp-action="roleupdate" asp-route-id="@item.Id">Rol güncelle</a>
-                            <a class="btn btn-dark btn-sm my-1" asp-area="admin" asp-controller="roles" asp-action="roledelete" asp-route-id="@item.Id">Rol sil</a>
+                            <a class="btn btn-dark btn-sm my-1 delete-role" asp-area="admin" asp-controller="roles" asp-action="roledelete" asp-route-id="@item.Id">Rol sil</a>
                         </td>
 
                     </tr>
@@ -46,3 +54,29 @@
 
 
 </div>
+<script>
+    $(document).ready(function () {
+        $('.delete-role').on('click', function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            swal({
+                title: "Emin misiniz?",
+                text: "Bu rolü silmek istediğinize emin misiniz?",
+                icon: "warning",
+                buttons: {
+                    cancel: "İptal",
+                    confirm: "Evet, sil"
+                },
+                dangerMode: true,
+                buttonsStyling: true,
+                showCancelButton: true
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    window.location.href = '/admin/roles/roledelete/' + id;
+                }
+            });
+        });
+    });
+</script>
+
