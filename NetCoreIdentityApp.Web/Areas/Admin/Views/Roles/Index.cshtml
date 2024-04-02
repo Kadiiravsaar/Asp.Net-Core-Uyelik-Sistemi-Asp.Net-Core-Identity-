@@ -1,27 +1,48 @@
-﻿@model List<AppRole>
+﻿@model List<AdminModel.RoleViewModel>
 
 @{
     ViewData["Title"] = "Index";
 }
 <a class="btn btn-primary" asp-area="admin" asp-controller="Roles" asp-action="RoleCreate">Rol Ekle</a>
-<h1>Index</h1>
 
-<hr />
+<div class="row">
 
-<h2>Roles</h2>
+    <div class="col-md-8 offset-md-2">
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Role Name</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var role in Model)
+        @if (TempData["SuccessMessage"] != null)
         {
-            <tr>
-                <td>@role.Name</td>
-            </tr>
+            <div class="alert alert-info" role="alert">
+                @TempData["SuccessMessage"]
+            </div>
         }
-    </tbody>
-</table>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Role ismi</th>
+                    <th></th>
+
+                </tr>
+            </thead>
+
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Name</td>
+                        <td>
+                            <a class="btn btn-dark btn-sm" asp-area="admin" asp-controller="roles" asp-action="roleupdate" asp-route-id="@item.Id">Rol güncelle</a>
+                            <a class="btn btn-dark btn-sm my-1" asp-area="admin" asp-controller="roles" asp-action="roledelete" asp-route-id="@item.Id">Rol sil</a>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
