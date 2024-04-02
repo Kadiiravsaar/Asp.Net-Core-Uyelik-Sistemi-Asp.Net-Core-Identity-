@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NetCoreIdentityApp.Web.Areas.Admin.Models;
 using NetCoreIdentityApp.Web.Extensions;
 using NetCoreIdentityApp.Web.Models;
@@ -18,9 +19,16 @@ namespace NetCoreIdentityApp.Web.Areas.Admin.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var roles = _roleManager.Roles.ToList();
+            //var roles = _roleManager.Roles.ToList();
+
+            var roles = await _roleManager.Roles.Select(x => new RoleViewModel() // rolleri çek ve her birini RoleViewModel'e dönüştür
+            {
+                Id = x.Id, // x = AppRole
+                Name = x.Name
+            }).ToListAsync();
+
             return View(roles);
         }
         [HttpGet]
@@ -41,6 +49,36 @@ namespace NetCoreIdentityApp.Web.Areas.Admin.Controllers
 
             }
             return RedirectToAction(nameof(RolesController.Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RoleUpdate(string id)
+        {
+            var roleToUpdate = await _roleManager.FindByIdAsync(id);
+            if (roleToUpdate == null)
+            {
+                throw new Exception("Böyle bir rol yoktur");
+            }
+
+            return View(new RoleUpdateViewModel() { Id = id,Name = roleToUpdate.Name});
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> RoleUpdate(RoleUpdateViewModel request)
+        {
+
+            var roleToUpdate = await _roleManager.FindByIdAsync(request.Id);
+            if (roleToUpdate == null)
+            {
+                throw new Exception("Böyle bir rol yoktur");
+            }
+            roleToUpdate.Name = request.Name;
+            await _roleManager.UpdateAsync(roleToUpdate);
+
+            ViewData["SuccessMessage"] = "Rol bilgisi Güncellenmiştir";
+            return View();
         }
 
     }
