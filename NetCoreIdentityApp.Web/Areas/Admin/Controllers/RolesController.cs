@@ -60,7 +60,7 @@ namespace NetCoreIdentityApp.Web.Areas.Admin.Controllers
                 throw new Exception("Böyle bir rol yoktur");
             }
 
-            return View(new RoleUpdateViewModel() { Id = id,Name = roleToUpdate.Name});
+            return View(new RoleUpdateViewModel() { Id = id, Name = roleToUpdate.Name });
         }
 
 
@@ -110,7 +110,8 @@ namespace NetCoreIdentityApp.Web.Areas.Admin.Controllers
         public async Task<IActionResult> AssignRoleToUser(string id)
         {
             var currentUser = (await _userManager.FindByIdAsync(id))!; // kullanıcı bulalım
-           var roles = await _roleManager.Roles.ToListAsync(); // var olan tüm rolleri bulalım
+            ViewBag.userId = id;
+            var roles = await _roleManager.Roles.ToListAsync(); // var olan tüm rolleri bulalım
 
             var userRoles = await _userManager.GetRolesAsync(currentUser); // kullanıcının rolleri liste string olarak beriyor
 
@@ -136,7 +137,32 @@ namespace NetCoreIdentityApp.Web.Areas.Admin.Controllers
             return View(roleViewModelList);
         }
 
-       
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> AssignRoleToUser(string userId, List<AssignRoleToUserViewModel> requestList)
+        {
+
+            var userToAssignRoles = (await _userManager.FindByIdAsync(userId))!; // hangi kullanıcıya atama yapıcam
+
+            foreach (var role in requestList)
+            {
+
+                if (role.Exist)
+                {
+                    await _userManager.AddToRoleAsync(userToAssignRoles, role.Name);
+
+                }
+                else
+                {
+                    await _userManager.RemoveFromRoleAsync(userToAssignRoles, role.Name);
+                }
+
+            }
+
+            return RedirectToAction(nameof(HomeController.UserList), "Home");
+        }
     }
 }
 
