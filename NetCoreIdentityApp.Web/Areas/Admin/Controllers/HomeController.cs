@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NetCoreIdentityApp.Web.Areas.Admin.Models;
@@ -6,6 +7,7 @@ using NetCoreIdentityApp.Web.Models;
 
 namespace NetCoreIdentityApp.Web.Areas.Admin.Controllers
 {
+    [Authorize(Roles ="Admin")]
     [Area("Admin")]
     public class HomeController : Controller
     {

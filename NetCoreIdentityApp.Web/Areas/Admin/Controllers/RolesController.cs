@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NetCoreIdentityApp.Web.Areas.Admin.Models;
@@ -19,6 +20,8 @@ namespace NetCoreIdentityApp.Web.Areas.Admin.Controllers
             _userManager = userManager;
         }
 
+
+        [Authorize(Roles = "admin,role-action,editör,min")]
         public async Task<IActionResult> Index()
         {
             //var roles = _roleManager.Roles.ToList();
@@ -31,12 +34,15 @@ namespace NetCoreIdentityApp.Web.Areas.Admin.Controllers
 
             return View(roles);
         }
-        [HttpGet]
+
+        [Authorize(Roles = "admin,role-action")]
         public IActionResult RoleCreate()
         {
             return View();
         }
 
+
+        [Authorize(Roles = "admin,role-action")]
         [HttpPost]
         public async Task<IActionResult> RoleCreate(CreateRoleViewModel request)
         {
@@ -51,7 +57,9 @@ namespace NetCoreIdentityApp.Web.Areas.Admin.Controllers
             return RedirectToAction(nameof(RolesController.Index));
         }
 
-        [HttpGet]
+
+
+        [Authorize(Roles = "admin,role-action")]
         public async Task<IActionResult> RoleUpdate(string id)
         {
             var roleToUpdate = await _roleManager.FindByIdAsync(id);
@@ -63,8 +71,7 @@ namespace NetCoreIdentityApp.Web.Areas.Admin.Controllers
             return View(new RoleUpdateViewModel() { Id = id, Name = roleToUpdate.Name });
         }
 
-
-
+        [Authorize(Roles = "admin,role-action")]
         [HttpPost]
         public async Task<IActionResult> RoleUpdate(RoleUpdateViewModel request)
         {
@@ -83,6 +90,7 @@ namespace NetCoreIdentityApp.Web.Areas.Admin.Controllers
 
 
 
+        [Authorize(Roles = "admin,role-action")]
         public async Task<IActionResult> RoleDelete(string id)
         {
             var roleToDelete = await _roleManager.FindByIdAsync(id);
