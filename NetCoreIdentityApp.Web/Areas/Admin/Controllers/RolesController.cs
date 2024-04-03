@@ -107,6 +107,36 @@ namespace NetCoreIdentityApp.Web.Areas.Admin.Controllers
 
         }
 
+        public async Task<IActionResult> AssignRoleToUser(string id)
+        {
+            var currentUser = (await _userManager.FindByIdAsync(id))!; // kullanıcı bulalım
+           var roles = await _roleManager.Roles.ToListAsync(); // var olan tüm rolleri bulalım
 
+            var userRoles = await _userManager.GetRolesAsync(currentUser); // kullanıcının rolleri liste string olarak beriyor
+
+            var roleViewModelList = new List<AssignRoleToUserViewModel>(); // liste olarak atama yaptım
+
+            foreach (var role in roles) // mevcut Rollerde dönelim
+            {
+
+                var assignRoleToUserViewModel = new AssignRoleToUserViewModel() { Id = role.Id, Name = role.Name! };
+                // her döndüğümde bir  nesne örneği oluşturucam
+
+
+                if (userRoles.Contains(role.Name!)) // eğer kullanıcı rollerinde var ise yokas aşağıad listeye eklettim
+                {
+                    assignRoleToUserViewModel.Exist = true; // var mı yok mu ona bakıcam
+                }
+
+                roleViewModelList.Add(assignRoleToUserViewModel);
+
+
+            }
+
+            return View(roleViewModelList);
+        }
+
+       
     }
 }
+
