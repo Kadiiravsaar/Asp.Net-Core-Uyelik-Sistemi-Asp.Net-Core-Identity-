@@ -159,5 +159,14 @@ namespace NetCoreIdentityApp.Web.Controllers
 
             return View(userEditViewModel);
         }
+
+
+        public IActionResult AccessDenied(string returnUrl)
+        {
+            string message = string.Empty;
+            message = "Yetkiniz yoktur lürfen yetkili biri ile iletişime geçiniz";
+            ViewBag.message = message;
+            return View();
+        }
     }
 }

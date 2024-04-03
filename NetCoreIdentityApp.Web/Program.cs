@@ -31,6 +31,7 @@ builder.Services.ConfigureApplicationCookie(opt =>
     opt.LoginPath = new PathString("/Home/SignIn");
     //Kullanýcýlar korunan bir kaynaða eriþmeye çalýþýrken ve kimlik doðrulamasý yapmamýþsa, oturum açmak için bu yola yönlendirilirler.
 
+    opt.AccessDeniedPath = new PathString("/Member/AccessDenied");
     opt.LogoutPath = new PathString("/Member/Logout");
 
 
