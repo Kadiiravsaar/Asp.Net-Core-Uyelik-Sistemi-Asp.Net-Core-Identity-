@@ -14,6 +14,10 @@
                 <li><a class="dropdown-item" asp-controller="Member" asp-action="Index">Profil</a></li>
                 <li><a class="dropdown-item" asp-route-returnurl="/Home/Index" asp-controller="Member" asp-action="logout">Çıkış yap</a></li>
 
+
+                <li><a class="dropdown-item" asp-controller="Member" asp-action="Claims">Claims</a></li>
+
+
                 @if (User.HasClaim(x =>x.Value == "Admin"))
                 {
                     <li><a class="dropdown-item" asp-area="admin" asp-controller="Home" asp-action="Index">Admin</a></li>

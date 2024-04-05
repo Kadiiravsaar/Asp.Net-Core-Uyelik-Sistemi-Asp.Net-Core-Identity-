@@ -161,6 +161,19 @@ namespace NetCoreIdentityApp.Web.Controllers
         }
 
 
+        public async Task<IActionResult> Claims()
+        {
+            var userClaimList = User.Claims.Select(x => new ClaimViewModel()
+            {
+                Issuer = x.Issuer,
+                Type = x.Type,
+                Value = x.Value
+            }).ToList();
+            return View();
+        }
+
+
+
         public IActionResult AccessDenied(string returnUrl)
         {
             string message = string.Empty;
