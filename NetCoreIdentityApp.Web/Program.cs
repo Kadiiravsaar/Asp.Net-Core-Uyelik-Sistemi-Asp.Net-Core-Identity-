@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
+using NetCoreIdentityApp.Web.ClaimProvider;
 using NetCoreIdentityApp.Web.Extensions;
 using NetCoreIdentityApp.Web.Models;
 using NetCoreIdentityApp.Web.OptionsModels;
@@ -47,6 +49,7 @@ builder.Services.ConfigureApplicationCookie(opt =>
 builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.GetCurrentDirectory())); // benim IFileProvider bunu geçtiðim yerde çalýþacaðýmý bil
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IClaimsTransformation, UserClaimProvider>();
 
 var app = builder.Build();
 
