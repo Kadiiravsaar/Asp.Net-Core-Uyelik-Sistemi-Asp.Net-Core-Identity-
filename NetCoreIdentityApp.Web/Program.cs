@@ -51,6 +51,16 @@ builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Emai
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IClaimsTransformation, UserClaimProvider>();
 
+
+builder.Services.AddAuthorization(opt =>
+{
+    opt.AddPolicy("AnkaraPolicy", pol =>
+    {
+        pol.RequireClaim("city", "Ankara"); // ankara claim'ine sahipler bu policy içerisinde bulunanlara eriþebilir. Ankaranýn yanýnda manisa da istersem "ankara","manisa" yazmam gerekliydi
+    });
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

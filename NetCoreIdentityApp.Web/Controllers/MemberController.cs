@@ -160,8 +160,8 @@ namespace NetCoreIdentityApp.Web.Controllers
             return View(userEditViewModel);
         }
 
-
-        public async Task<IActionResult> Claims()
+        [HttpGet]
+        public IActionResult Claims()
         {
             var userClaimList = User.Claims.Select(x => new ClaimViewModel()
             {
@@ -169,6 +169,15 @@ namespace NetCoreIdentityApp.Web.Controllers
                 Type = x.Type,
                 Value = x.Value
             }).ToList();
+            return View();
+        }
+
+
+        [Authorize(Policy = "AnkaraPolicy")]
+        [HttpGet]
+        public IActionResult AnkaraPage()
+        {
+         
             return View();
         }
 
