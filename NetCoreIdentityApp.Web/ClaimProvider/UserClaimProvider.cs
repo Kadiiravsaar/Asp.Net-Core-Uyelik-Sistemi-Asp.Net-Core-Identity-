@@ -20,11 +20,6 @@ namespace NetCoreIdentityApp.Web.ClaimProvider
             var identityUser = principal.Identity as ClaimsIdentity; // claim'lerden oluşan identity
             var currentUser = await _userManager.FindByNameAsync(identityUser.Name);
 
-            if (currentUser == null)
-            {
-                return principal;
-            }
-
             if (String.IsNullOrEmpty(currentUser!.City ))
             {
                 return principal;
