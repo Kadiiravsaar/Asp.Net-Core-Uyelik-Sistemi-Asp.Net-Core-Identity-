@@ -6,6 +6,7 @@ using NetCoreIdentityApp.Web.Services;
 using NetCoreIdentityApp.Web.ViewModels;
 using System.Diagnostics;
 using System.Drawing;
+using System.Security.Claims;
 using System.Web;
 
 namespace NetCoreIdentityApp.Web.Controllers
@@ -60,16 +61,30 @@ namespace NetCoreIdentityApp.Web.Controllers
                 Email = request.Email
             }, request.PasswordConfirm);
 
-            if (identityResult.Succeeded)
+
+            if (!identityResult.Succeeded)
             {
-                TempData["SuccesMessage"] = "Üye başarılı bir şekilde kayıt edildi....";
-                return RedirectToAction(nameof(HomeController.SignUp));
+                ModelState.AddModelErrorList(identityResult.Errors.Select(x => x.Description).ToList());
+                return View();
+            }
+
+            var exchangeExpireClaim = new Claim("ExchangeExpireDate", DateTime.Now.AddDays(10).ToString());
+
+            var user = await _userManager.FindByNameAsync(request.UserName);
+
+            var claimResult = await _userManager.AddClaimAsync(user!, exchangeExpireClaim);
+
+
+            if (!claimResult.Succeeded)
+            {
+                ModelState.AddModelErrorList(claimResult.Errors.Select(x => x.Description).ToList());
+                return View();
             }
 
 
-            ModelState.AddModelErrorList(identityResult.Errors.Select(e => e.Description).ToList());
+            TempData["SuccessMessage"] = "Üyelik kayıt işlemi başarıla gerçekleşmiştir.";
 
-            return View();
+            return RedirectToAction(nameof(HomeController.SignUp));
         }
 
 
