@@ -163,6 +163,8 @@ namespace NetCoreIdentityApp.Web.Controllers
         [HttpGet]
         public IActionResult Claims()
         {
+            //Select ifadesi hakkında daha fazla bilgi vermek gerekirse, LINQ (Language Integrated Query) ifadelerinin bir parçasıdır
+            //ve bir koleksiyonun her bir öğesini belirli bir işleme tabi tutar.
             var userClaimList = User.Claims.Select(x => new ClaimViewModel()
             {
                 Issuer = x.Issuer,

@@ -58,6 +58,7 @@ builder.Services.AddAuthorization(opt =>
     {
         pol.RequireClaim("city", "Ankara"); // ankara claim'ine sahipler bu policy içerisinde bulunanlara eriþebilir. Ankaranýn yanýnda manisa da istersem "ankara","manisa" yazmam gerekliydi
     });
+    // MemberController / AnkaraPage
 });
 
 
