@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
@@ -7,6 +8,7 @@ using NetCoreIdentityApp.Web.ClaimProvider;
 using NetCoreIdentityApp.Web.Extensions;
 using NetCoreIdentityApp.Web.Models;
 using NetCoreIdentityApp.Web.OptionsModels;
+using NetCoreIdentityApp.Web.Requirements;
 using NetCoreIdentityApp.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -50,6 +52,7 @@ builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IClaimsTransformation, UserClaimProvider>();
+builder.Services.AddScoped<IAuthorizationHandler, ExchangeExpireRequirementHandler>();
 
 
 builder.Services.AddAuthorization(opt =>
@@ -59,6 +62,13 @@ builder.Services.AddAuthorization(opt =>
         pol.RequireClaim("city", "Ankara"); // ankara claim'ine sahipler bu policy içerisinde bulunanlara eriþebilir. Ankaranýn yanýnda manisa da istersem "ankara","manisa" yazmam gerekliydi
     });
     // MemberController / AnkaraPage
+
+
+
+    opt.AddPolicy("ExchangePolicy", pol =>
+    {
+        pol.AddRequirements(new ExchangeExpireRequirement()); 
+    });
 });
 
 
