@@ -203,6 +203,13 @@ namespace NetCoreIdentityApp.Web.Controllers
             return View();
         }
 
+        [Authorize(Policy = "ViolencePolicy")]
+        [HttpGet]
+        public IActionResult ViolencePage()
+        {
+
+            return View();
+        }
 
 
         public IActionResult AccessDenied(string returnUrl)

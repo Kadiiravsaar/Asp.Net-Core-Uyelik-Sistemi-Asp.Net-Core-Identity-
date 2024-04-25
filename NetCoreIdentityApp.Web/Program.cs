@@ -53,6 +53,7 @@ builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Emai
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IClaimsTransformation, UserClaimProvider>();
 builder.Services.AddScoped<IAuthorizationHandler, ExchangeExpireRequirementHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, ViolenceRequirementHandler>();
 
 
 builder.Services.AddAuthorization(opt =>
@@ -68,6 +69,11 @@ builder.Services.AddAuthorization(opt =>
     opt.AddPolicy("ExchangePolicy", pol =>
     {
         pol.AddRequirements(new ExchangeExpireRequirement()); 
+    });
+
+    opt.AddPolicy("ViolencePolicy", pol =>
+    {
+        pol.AddRequirements(new ViolenceRequirement() { ThreshOldAge = 18});
     });
 });
 
