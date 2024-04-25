@@ -9,6 +9,7 @@ using NetCoreIdentityApp.Web.Extensions;
 using NetCoreIdentityApp.Web.Models;
 using NetCoreIdentityApp.Web.OptionsModels;
 using NetCoreIdentityApp.Web.Requirements;
+using NetCoreIdentityApp.Web.Seeds;
 using NetCoreIdentityApp.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -79,6 +80,13 @@ builder.Services.AddAuthorization(opt =>
 
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager =  scope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
+
+    PermissionSeed.Seed(roleManager);
+}
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
