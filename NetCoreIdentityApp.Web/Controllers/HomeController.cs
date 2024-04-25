@@ -116,17 +116,24 @@ namespace NetCoreIdentityApp.Web.Controllers
 
             var signInResult = await _signInManager.PasswordSignInAsync(hasUser, request.Password, isPersistent: request.RememberMe, lockoutOnFailure: true);
 
-            if (signInResult.Succeeded)
-            {
-                return Redirect(returnUrl!);
-            }
-
             if (signInResult.IsLockedOut)
             {
                 ModelState.AddModelError(string.Empty, "1 dakika boyunca giriş yapamazsın");
                 return View();
             }
 
+            if (hasUser.BirthDate.HasValue)
+            {
+                await _signInManager.SignInWithClaimsAsync(hasUser, request.RememberMe, new[] { new Claim("birthdate", hasUser.BirthDate.Value.ToString()) });
+            }
+
+
+            if (signInResult.Succeeded)
+            {
+                return Redirect(returnUrl!);
+            }
+
+          
 
             ModelState.AddModelErrorList(new List<string>()
             {

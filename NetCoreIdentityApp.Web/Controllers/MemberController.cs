@@ -6,6 +6,8 @@ using Microsoft.Extensions.FileProviders;
 using NetCoreIdentityApp.Web.Extensions;
 using NetCoreIdentityApp.Web.Models;
 using NetCoreIdentityApp.Web.ViewModels;
+using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace NetCoreIdentityApp.Web.Controllers
 {
@@ -143,7 +145,17 @@ namespace NetCoreIdentityApp.Web.Controllers
 
             await _userManager.UpdateSecurityStampAsync(user); // SecuritySecurityStamp güncelle
             await _signInManager.SignOutAsync(); // cokkie bilgisi için giriş çıkış yaptııyorum
-            await _signInManager.SignInAsync(user, true); // passwordümü alamadığım için elimde olmadığı için SignInAsync ile yaptım. Elimde olsaydı PasswordSignInAsync ile giriş yaptırırdım
+
+            if (request.BirthDate.HasValue)
+            {
+                await _signInManager.SignInWithClaimsAsync(user, true, new[] { new Claim("birthdate", user.BirthDate!.Value.ToString()) });
+
+            }
+            else
+            {
+                await _signInManager.SignInAsync(user, true); // passwordümü alamadığım için elimde olmadığı için SignInAsync ile yaptım. Elimde olsaydı PasswordSignInAsync ile giriş yaptırırdım
+
+            }
 
             TempData["SuccessMessage"] = "Üye bilgileri başarıyla değiştirilmiştir";
 
