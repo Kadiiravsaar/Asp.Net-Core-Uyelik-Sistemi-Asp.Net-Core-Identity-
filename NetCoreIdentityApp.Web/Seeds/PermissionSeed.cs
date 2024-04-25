@@ -6,7 +6,7 @@ namespace NetCoreIdentityApp.Web.Seeds
 {
     public class PermissionSeed
     {
-        public static async void Seed(RoleManager<AppRole> roleManager)
+        public static async Task Seed(RoleManager<AppRole> roleManager)
         {
             var hasBasicRole = await roleManager.RoleExistsAsync("BasicRole");
 

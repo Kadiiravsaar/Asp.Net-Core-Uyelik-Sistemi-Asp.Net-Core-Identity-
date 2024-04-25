@@ -84,7 +84,7 @@ using (var scope = app.Services.CreateScope())
 {
     var roleManager =  scope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
 
-    PermissionSeed.Seed(roleManager);
+    await PermissionSeed.Seed(roleManager);
 }
 
 
