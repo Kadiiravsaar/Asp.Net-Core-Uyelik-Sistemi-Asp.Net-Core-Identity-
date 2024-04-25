@@ -7,7 +7,7 @@ using NetCoreIdentityApp.Web.Models;
 
 namespace NetCoreIdentityApp.Web.Areas.Admin.Controllers
 {
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles = "Admin")]
     [Area("Admin")]
     public class HomeController : Controller
     {
